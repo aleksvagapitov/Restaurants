@@ -1,0 +1,24 @@
+@using Infrastructure.Views.Shared
+@model Application.Owners.Reservations.ReservationEditedByOwnerViewModel
+
+@{
+    ViewData["EmailTitle"] = $"Reservation {@Model.Status}";
+}
+
+<h1>
+
+</h1>
+
+<p>
+    Your reservation at @Model.RestaurantName has been @Model.Status
+</p>
+
+<p>
+    Table for @Model.People on @Model.DateAndTime
+</p>
+
+<p>
+    Name: @Model.FirstName @Model.LastName
+</p>
+
+<br />

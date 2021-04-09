@@ -1,0 +1,45 @@
+version: "3.1"
+
+services:
+  postgres-db:
+    image: postgis/postgis:latest
+    restart: unless-stopped
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_DB: Restaurants
+      POSTGRES_PASSWORD: password
+      POSTGRES_USER: user
+    volumes:
+      - postgres-data:/var/lib/postgresql/data/
+
+  mail:
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    volumes:
+      - maildata:/var/mail
+      - mailstate:/var/mail-state
+      - maillogs:/var/log/mail
+      - mailconfig:/tmp/docker-mailserver/
+    
+  minio:
+    image: minio/minio
+    ports:
+      - "9000:9000"
+    volumes:
+      - minio:/data
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    command: 'server /export'
+
+
+volumes:
+  postgres-data:
+  maildata:
+  mailstate:
+  mailconfig:
+  maillogs:
+  minio:

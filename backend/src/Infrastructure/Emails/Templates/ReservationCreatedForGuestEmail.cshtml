@@ -1,0 +1,28 @@
+@using Infrastructure.Views.Shared
+@model Application.Reservations.ReservationCreatedForGuestEmailViewModel
+
+@{
+    ViewData["EmailTitle"] = $"Reservation {@Model.Status}";
+}
+
+<h1>
+
+</h1>
+
+<p>
+    Your table at  @Model.RestaurantName is currently being reserved
+</p>
+
+<p>
+    Expect a confirmation email
+</p>
+
+<p>
+    Table for @Model.People on @Model.DateAndTime
+</p>
+
+<p>
+    Name: @Model.FirstName @Model.LastName
+</p>
+
+<br />

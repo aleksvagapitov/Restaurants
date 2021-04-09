@@ -1,0 +1,68 @@
+version: "3.5"
+
+services:
+  backend:
+    container_name: restaurants-backend
+    image: restaurants-backend
+    build:
+      context: .
+    depends_on:
+      - "restaurants-db"
+      - "mailhog"
+      - "minio"
+    environment:
+      ConnectionStrings__DatabaseConnection: "Host=restaurants-db;Port=5432;Username=user;Password=password123;Database=Restaurants;"
+      EmailSettings__MailServer: "mailhog"
+      EmailSettings__MailPort: 1025
+      Minio__Endpoint: "minio:9000"
+      Minio__ApiSecret: "minioadmin"
+      Minio__ApiKey: "minioadmin"
+      Minio__BucketName: "restaurants"
+      Minio__AccessPoint: "172.17.0.1:9000"
+      LocationApiParameters__ApiKey: ""
+      TokenKey: ""
+    ports:
+      - 8080:80
+    links:
+      - "restaurants-db:restaurants-db"
+      - "mailhog:mailhog"
+      - "minio:minio"
+    networks:
+      - restaurants
+
+  restaurants-db:
+    container_name: restaurants-db
+    image: postgis/postgis:latest
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: Restaurants
+      POSTGRES_PASSWORD: password123
+      POSTGRES_USER: user
+    networks:
+      - restaurants
+
+  mailhog:
+    container_name: mailhog
+    image: mailhog/mailhog
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - restaurants
+    
+  minio:
+    container_name: minio
+    image: minio/minio
+    ports:
+      - "9000:9000"
+    environment:
+      MINIO_ACCESS_KEY: minioadmin
+      MINIO_SECRET_KEY: minioadmin
+    networks:
+      - restaurants
+    command: 'server /export'
+
+
+networks:
+  restaurants:
+    name: restaurants

@@ -1,0 +1,75 @@
+version: "3.5"
+
+services:
+  infra-db:
+    image: postgres:12.3
+    volumes:
+        - infra-db-data:/var/lib/postgresql/data
+    environment:
+        POSTGRES_PASSWORD: teamcity
+        POSTGRES_USER: teamcity
+        POSTGRES_DB: teamcity
+    networks:
+      - infranet
+    restart: unless-stopped
+    
+  gitea:
+    image: gitea/gitea:1.12
+    environment:
+      - USER_UID=1000
+      - USER_GID=1000
+    restart: unless-stopped
+    volumes:
+      - gitea:/data
+      - gitea-timezone:/etc/timezone:ro
+      - gitea-localtime:/etc/localtime:ro
+    networks:
+      - infranet
+    ports:
+      - 3000:3000
+      - 222:22
+
+  my-registry:
+    image: registry:2.6.1
+    volumes:
+      - registry:/var/lib/registry
+    networks:
+      - infranet
+    ports:
+      - 5000:5000
+    restart: unless-stopped
+
+  teamcity:
+    image: jetbrains/teamcity-server:2020.1.2
+    volumes:
+      - teamcity-server-datadir:/data/teamcity_server/datadir
+      - teamcity-server-logs:/opt/teamcity/logs
+    networks:
+      - infranet
+    ports:
+      - 8111:8111
+    restart: unless-stopped
+    
+  teamcity-agent:
+    image: jetbrains/teamcity-agent:2020.1.2
+    networks:
+      - infranet
+    environment:
+      SERVER_URL: http://teamcity:8111
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    restart: unless-stopped
+
+volumes:
+  infra-db-data:
+  gitea:
+  gitea-timezone:
+  gitea-localtime:
+  registry:
+  teamcity-server-datadir:
+  teamcity-server-logs:
+
+networks:
+  infranet:
+    name: infra_network
+  
