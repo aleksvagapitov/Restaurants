@@ -20,7 +20,7 @@ services:
       Minio__BucketName: "restaurants"
       Minio__AccessPoint: "172.17.0.1:9000"
       LocationApiParameters__ApiKey: ""
-      TokenKey: ""
+      TokenKey: "super secret key"
     ports:
       - 8080:80
     links:
