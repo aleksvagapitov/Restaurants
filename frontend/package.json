@@ -45,6 +45,7 @@
     "start": "BROWSER='firefox' react-scripts start",
     "build": "sh -ac '. ./.env.${REACT_APP_ENV}; react-scripts build'",
     "build:staging": "REACT_APP_ENV=staging npm run build",
+    "build:server": "REACT_APP_ENV=server npm run build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
