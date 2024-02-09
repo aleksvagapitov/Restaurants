@@ -73,6 +73,6 @@ services:
       MINIO_SECRET_KEY: minioadmin
     command: 'server /export'
 
-network:
+networks:
   infrastructure:
     external: true
