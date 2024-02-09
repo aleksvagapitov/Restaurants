@@ -13,7 +13,7 @@ services:
         - 'traefik.http.routers.restaurants.tls.certresolver=letsencrypt'
         - 'traefik.http.routers.restaurants.service=restaurantsservice'
         - 'traefik.http.services.restaurantsservice.loadbalancer.server.port=80' # Required in swarms, https://doc.traefik.io/traefik/v2.0/routing/providers/docker/#services
-    network:
+    networks:
       - infrastructure
 
   backend:
@@ -47,7 +47,7 @@ services:
       - "restaurants-db:restaurants-db"
       - "mailhog:mailhog"
       - "minio:minio"
-    network:
+    networks:
       - infrastructure
 
   restaurants-db:
