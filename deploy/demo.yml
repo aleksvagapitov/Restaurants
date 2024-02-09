@@ -4,7 +4,15 @@ services:
   frontend:
     image: my-registry:55000/rest-front:ci-${BUILD_NUMBER}
     ports:
-      - 3001:80
+      - 80
+    deploy:
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.restaurants.rule=Host(`restaurants.aleksvagapitov.com`)' # Put in your domain
+        - 'traefik.http.routers.restaurants.entrypoints=websecure'
+        - 'traefik.http.routers.restaurants.tls.certresolver=letsencrypt'
+        - 'traefik.http.routers.restaurants.service=restaurantsservice'
+        - 'traefik.http.services.restaurantsservice.loadbalancer.server.port=80' # Required in swarms, https://doc.traefik.io/traefik/v2.0/routing/providers/docker/#services
 
   backend:
     image: my-registry:55000/rest-back:ci-${BUILD_NUMBER}
@@ -24,7 +32,15 @@ services:
       LocationApiParameters__ApiKey: ""
       TokenKey: "super secret key"
     ports:
-      - 8080:80
+      - 80
+    deploy:
+      labels:
+        - 'traefik.enable=true'
+        - 'traefik.http.routers.restaurantsback.rule=Host(`restaurantsback.aleksvagapitov.com`)' # Put in your domain
+        - 'traefik.http.routers.restaurantsback.entrypoints=websecure'
+        - 'traefik.http.routers.restaurantsback.tls.certresolver=letsencrypt'
+        - 'traefik.http.routers.restaurantsback.service=restaurantsbackservice'
+        - 'traefik.http.services.restaurantsbackservice.loadbalancer.server.port=80' # Required in swarms, https://doc.traefik.io/traefik/v2.0/routing/providers/docker/#services
     links:
       - "restaurants-db:restaurants-db"
       - "mailhog:mailhog"
