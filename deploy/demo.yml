@@ -13,6 +13,8 @@ services:
         - 'traefik.http.routers.restaurants.tls.certresolver=letsencrypt'
         - 'traefik.http.routers.restaurants.service=restaurantsservice'
         - 'traefik.http.services.restaurantsservice.loadbalancer.server.port=80' # Required in swarms, https://doc.traefik.io/traefik/v2.0/routing/providers/docker/#services
+    network:
+      - infrastructure
 
   backend:
     image: my-registry:55000/rest-back:ci-${BUILD_NUMBER}
@@ -45,6 +47,8 @@ services:
       - "restaurants-db:restaurants-db"
       - "mailhog:mailhog"
       - "minio:minio"
+    network:
+      - infrastructure
 
   restaurants-db:
     image: postgis/postgis:latest
@@ -68,3 +72,7 @@ services:
       MINIO_ACCESS_KEY: minioadmin
       MINIO_SECRET_KEY: minioadmin
     command: 'server /export'
+
+network:
+  infrastructure:
+    external: true
