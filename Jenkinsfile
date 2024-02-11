@@ -29,6 +29,8 @@ pipeline {
                 dir ("deploy") {
                     sh '''
                     docker stack deploy -c demo.yml demo
+                    docker service scale demo_backend=0
+                    docker service scale demo_backend=1
                     '''
                 }
             }
