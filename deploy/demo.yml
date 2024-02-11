@@ -57,12 +57,16 @@ services:
       POSTGRES_DB: Restaurants
       POSTGRES_PASSWORD: password123
       POSTGRES_USER: user
+    networks:
+      - infrastructure
 
   mailhog:
     image: mailhog/mailhog
     ports:
       - "8025:8025"
       - "1025:1025"
+    networks:
+      - infrastructure
     
   minio:
     image: minio/minio
@@ -72,6 +76,8 @@ services:
       MINIO_ACCESS_KEY: minioadmin
       MINIO_SECRET_KEY: minioadmin
     command: 'server /export'
+    networks:
+      - infrastructure
 
 networks:
   infrastructure:
