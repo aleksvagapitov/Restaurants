@@ -30,6 +30,7 @@ pipeline {
                     sh '''
                     docker stack deploy -c demo.yml demo
                     docker service scale demo_backend=0
+                    sleep 30
                     docker service scale demo_backend=1
                     '''
                 }
