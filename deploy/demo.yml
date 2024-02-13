@@ -8,7 +8,7 @@ services:
     deploy:
       labels:
         - 'traefik.enable=true'
-        - 'traefik.http.routers.restaurants-front.rule=Host(`restaurants.aleksvagapitov.com`)' # Put in your domain
+        - 'traefik.http.routers.restaurants-front.rule=Host(`aleksvagapitov.com`)' # Put in your domain
         - 'traefik.http.routers.restaurants-front.entrypoints=websecure'
         - 'traefik.http.routers.restaurants-front.tls.certresolver=letsencrypt'
         - 'traefik.http.routers.restaurants-front.service=restaurants-front-service'
@@ -38,7 +38,7 @@ services:
     deploy:
       labels:
         - 'traefik.enable=true'
-        - 'traefik.http.routers.restaurants-back.rule=(Host(`restaurants.aleksvagapitov.com`) && PathPrefix(`/api`))' # Put in your domain
+        - 'traefik.http.routers.restaurants-back.rule=(Host(`aleksvagapitov.com`) && PathPrefix(`/api`))' # Put in your domain
         - 'traefik.http.routers.restaurants-back.entrypoints=websecure'
         - 'traefik.http.routers.restaurants-back.tls.certresolver=letsencrypt'
         - 'traefik.http.routers.restaurants-back.service=restaurants-back-service'
